@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaApp.Data;
 using SocialMediaApp.Entities;
 
 namespace SocialMediaApp.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class UsersController : ControllerBase
+public class UsersController : BaseAPIController
 {
     private readonly DataContext _context;
 
@@ -17,12 +16,13 @@ public class UsersController : ControllerBase
     }
     
     // GET
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> Users()
     {
         return await _context.Users.ToListAsync();
     }
-    
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
