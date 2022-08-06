@@ -2,30 +2,33 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
 using SocialMediaApp.Entities;
+using SocialMediaApp.Interfaces;
 
 namespace SocialMediaApp.Controllers;
 
+[Authorize]
 public class UsersController : BaseAPIController
 {
-    private readonly DataContext _context;
+    private DataContext _context;
+    private IUserRepository _userRepository;
 
-    public UsersController(DataContext context)
+    public UsersController(DataContext context, IUserRepository userRepository)
     {
         _context = context;
+        _userRepository = userRepository;
     }
     
-    // GET
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> Users()
     {
-        return await _context.Users.ToListAsync();
+        return Ok(await _userRepository.GetUsersAsync());
     }
-    [Authorize]
-    [HttpGet("{id}")]
-    public async Task<ActionResult<AppUser>> GetUser(int id)
+
+    [HttpGet("{username}")]
+    public async Task<ActionResult<Memberdto>> GetUser(string username)
     {
-        return await _context.Users.FindAsync(id);
-    } 
+        return await _userRepository.GetUserAsync(username);
+    }
 }

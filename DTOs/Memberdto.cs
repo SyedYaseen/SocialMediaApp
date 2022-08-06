@@ -1,13 +1,13 @@
-﻿using SocialMediaApp.Extensions;
+using SocialMediaApp.Entities;
 
-namespace SocialMediaApp.Entities;
+namespace SocialMediaApp.DTOs;
 
-public class AppUser
+public class Memberdto
 {
     public int Id { get; set; }
     public string UserName { get; set; }
-    public byte[] Password { get; set; }
-    public byte[] PasswordSalt { get; set; }
+    public string PhotoUrl { get; set; }
+    public int Age { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string KnownAs { get; set; }
     public DateTime Created { get; set; } = DateTime.Now;
@@ -19,5 +19,4 @@ public class AppUser
     public string City { get; set; }
     public string Country { get; set; }
     public ICollection<Photos> Photos { get; set; }
-    
 }

@@ -19,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using SocialMediaApp.Data;
 using SocialMediaApp.Extensions;
 using SocialMediaApp.Interfaces;
+using SocialMediaApp.Middleware;
 using SocialMediaApp.Services;
 
 namespace API
@@ -36,6 +37,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_config);
+            
             services.AddIdentityServices(_config);
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,17 +46,16 @@ namespace API
             });
             services.AddAuthentication();
             services.AddCors();
-            
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+            
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
